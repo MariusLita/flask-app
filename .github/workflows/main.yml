@@ -67,6 +67,5 @@ jobs:
 
     - name: Deploy to Kubernetes (OKE)
       run: |
-        kubectl set image deployment/flask-app flask-app=$IMAGE
-        kubectl rollout status deployment/flask-app
+        kubectl get nodes
 
