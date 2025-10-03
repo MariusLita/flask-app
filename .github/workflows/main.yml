@@ -36,7 +36,7 @@ jobs:
 
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: sonar-scan   # Only run if SonarQube analysis job passes
+    needs: sonar-analysis   # Only run if SonarQube analysis job passes
 
     steps:
     - name: Checkout Code
@@ -58,7 +58,7 @@ jobs:
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
       with:
-        version: 'v1.28.0'   # match your OKE cluster version
+        version: 'v1.32.1'   # match your OKE cluster version
 
     - name: Configure kubeconfig
       run: |
@@ -70,5 +70,3 @@ jobs:
         kubectl set image deployment/flask-app flask-app=$IMAGE
         kubectl rollout status deployment/flask-app
 
-
-        # test
