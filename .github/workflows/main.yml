@@ -36,7 +36,7 @@ jobs:
 
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: sonar-analysis   # Only run if SonarQube analysis job passes
+    needs: sonar-scan   # Only run if SonarQube analysis job passes
 
     steps:
     - name: Checkout Code
