@@ -6,7 +6,7 @@ COPY app.py .
 
 ARG APP_VERSION
 ENV APP_VERSION=${APP_VERSION}
-LABEL version=${APP_VERSIPN}
+LABEL version=${APP_VERSION}
 
 EXPOSE 5000
 CMD ["python", "app.py"]
