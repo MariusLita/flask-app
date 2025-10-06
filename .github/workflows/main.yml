@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
 
 jobs:
@@ -50,10 +52,10 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        IMAGE=mariuslita/flask-app:${{ github.ref_name }}
-        echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-        docker build -t $IMAGE .
-        docker push $IMAGE
+        IMAGE_TAG=mariuslita/flask-app:${{ github_ref_name }}
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+        docker build --build-arg APP_VERSION=${IMAGETAG} -t $IMAGE_TAG .
+        docker push $IMAGE_TAG
 
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
@@ -67,4 +69,5 @@ jobs:
 
     - name: Deploy to Kubernetes (OKE)
       run: |
-        kubectl apply -f .
+        IMAGE_TAG=${IMAGE_TAG} envsubst < flask-deploy.yaml | kubectl apply -f -
+        kubectl rollout status deployment flask-app

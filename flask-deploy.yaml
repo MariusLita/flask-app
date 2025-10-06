@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: mariuslita/flask-app:latest
+          image: mariuslita/flask-app:${IMAGE_TAG}
+          imagePullPolicy: Always
           ports:
           - containerPort: 5000
           env:
             - name: APP_MESSAGE
               value: "Hello from k8s!"
             - name: APP_VERSION
-              value: "v3"
+              value: "${IMAGE_TAG}"
