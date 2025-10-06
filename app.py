@@ -3,8 +3,7 @@ import os
 
 app = Flask(__name__)
 
-# Get version from environment variable (default v1)
-VERSION = os.getenv("APP_VERSION", "v1")
+VERSION = os.getenv("APP_VERSION", "v2")
 MESSAGE = os.getenv("APP_MESSAGE", "Hello from Flask App!")
 
 @app.route("/")
