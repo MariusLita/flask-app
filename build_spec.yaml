@@ -1,0 +1,66 @@
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+shell: bash
+env:
+  variables:
+    SONAR_HOST_URL: "http://149.130.185.180:9001"
+    SONAR_PROJECT_KEY: "flask-app"
+
+  exportedVariables:
+    - BUILDRUN_HASH
+
+steps:
+
+  - type: Command
+    name: "Install Dependencies"
+    timeoutInSeconds: 40
+    command: |
+      echo "Install dependencies"
+      pip install -r requirements.txt
+      pip install sonar-scanner-cli
+
+  - type: Command
+    name: "Run SonarQube Scan"
+    timeoutInSeconds: 40
+    command: |
+      echo "Run SonarQube Scan"
+      sonar-scanner \
+        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+        -Dsonar.sources=. \
+        -Dsonar.host.url=${SONAR_HOST_URL} \
+        -Dsonar.login=${SONAR_TOKEN}
+
+  - type: Command
+    name: "Define unique image tag"
+    timeoutInSeconds: 40
+    command: |
+      export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+      echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+
+  - type: Command
+    timeoutInSeconds: 1200
+    name: "Build container image"
+    command: |
+      echo "OCI_PRIMARY_SOURCE_DIR: " ${OCI_PRIMARY_SOURCE_DIR}\n
+      echo pwd is : $(pwd)
+      cd ${OCI_PRIMARY_SOURCE_DIR}
+      docker build --pull --rm -t flask-image .      
+      echo "Succesfully build the image" 
+      docker images
+     
+outputArtifacts:
+  - name: flask-image
+    type: DOCKER_IMAGE
+    location: flask-image
+
+  - name: flask-deploy
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/flask-deploy.yaml
+
+  - name: flask-svc
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/flask-svc.yaml
+
+
