@@ -18,10 +18,13 @@ steps:
     name: "Install Dependencies"
     timeoutInSeconds: 40
     command: |
-      echo "Install dependencies"
-      nslookup google.com
-      yum install wget unzip -y
-      nslookup google.com
+      echo "Checking Internet connectivity..."
+      if curl -s --head http://www.google.com | grep "200 OK" > /dev/null; then
+        echo "✅ Internet connection is working."
+      else
+        echo "❌ No Internet connection. Exiting."
+        exit 1
+      fi
 
   - type: Command
     name: "Run SonarQube Scan"
