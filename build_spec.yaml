@@ -19,12 +19,9 @@ steps:
     timeoutInSeconds: 40
     command: |
       echo "Install dependencies"
-      apt-get update && apt-get install -y unzip wget
-      wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-      unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-      export PATH=$(pwd)/sonar-scanner-5.0.1.3006-linux/bin:$PATH
-      echo "install requirements.txt"
-      pip install -r requirements.txt
+      nslookup google.com
+      yum install wget unzip -y
+      nslookup google.com
 
   - type: Command
     name: "Run SonarQube Scan"
