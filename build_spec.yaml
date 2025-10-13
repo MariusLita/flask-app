@@ -7,7 +7,8 @@ env:
   variables:
     SONAR_HOST_URL: "http://149.130.185.180:9001"
     SONAR_PROJECT_KEY: "flask-app"
-
+  vaultVariables:
+    SONAR_TOKEN: "ocid1.vaultsecret.oc1.sa-bogota-1.amaaaaaa2ne4d2aab3dcio5y3xizdadb3e324jle7cgnpnjkz5ljmonws7ua"
   exportedVariables:
     - BUILDRUN_HASH
 
@@ -62,5 +63,4 @@ outputArtifacts:
   - name: flask-svc
     type: BINARY
     location: ${OCI_PRIMARY_SOURCE_DIR}/flask-svc.yaml
-
 
