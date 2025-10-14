@@ -15,27 +15,22 @@ env:
 steps:
 
   - type: Command
-    name: "Install Dependencies"
+    name: "Run SonarQube Scanner"
     timeoutInSeconds: 40
     command: |
       echo "Checking Internet connectivity..."
-      if curl -s --head http://www.google.com | grep "200 OK" > /dev/null; then
-        echo "✅ Internet connection is working."
-      else
-        echo "❌ No Internet connection. Exiting."
-        exit 1
-      fi
+      echo pwd is : $(pwd)
+      echo ls is : $(ls)
+      echo "Installing Python dependencies..."
 
-  - type: Command
-    name: "Run SonarQube Scan"
-    timeoutInSeconds: 40
-    command: |
-      echo "Run SonarQube Scan"
-      sonar-scanner \
-        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-        -Dsonar.sources=. \
-        -Dsonar.host.url=${SONAR_HOST_URL} \
-        -Dsonar.login=${SONAR_TOKEN}
+      docker run --rm \
+      -e SONAR_HOST_URL="${SONAR_HOST_URL}" \
+      -e SONAR_TOKEN="${SONAR_TOKEN}" \
+      -v "$(pwd):/usr/src" \
+      sonarsource/sonar-scanner-cli \
+      -Dsonar.projectKey="${SONAR_PROJECT_KEY}" \
+      -Dsonar.sources=/usr/src \
+      -Dsonar.python.version=3.10
 
   - type: Command
     name: "Define unique image tag"
@@ -67,4 +62,7 @@ outputArtifacts:
   - name: flask-svc
     type: BINARY
     location: ${OCI_PRIMARY_SOURCE_DIR}/flask-svc.yaml
+
+
+
 
