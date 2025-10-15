@@ -71,5 +71,5 @@ jobs:
 
     - name: Deploy to Kubernetes (OKE)
       run: |
-        IMAGE_TAG=${IMAGE_TAG} envsubst < flask-deploy.yaml | kubectl apply -f -
+        BUILDRUN_HASH=${IMAGE_TAG} envsubst < flask-deploy.yaml | kubectl apply -f -
         kubectl rollout status deployment flask-app
