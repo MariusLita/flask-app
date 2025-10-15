@@ -12,11 +12,9 @@ spec:
       labels:
         app: flask
     spec:
-      imagePullSecrets:
-        - name: ocirsecret
       containers:
         - name: flask-app
-          image: ${IMAGE_PATH}:${BUILDRUN_HASH}
+          image: mariuslita/flask-app:${IMAGE_TAG}
           imagePullPolicy: Always
           ports:
           - containerPort: 5000
@@ -24,4 +22,4 @@ spec:
             - name: APP_MESSAGE
               value: "Hello from k8s!"
             - name: APP_VERSION
-              value: "${BUILDRUN_HASH}"
+              value: "${IMAGE_TAG}"
